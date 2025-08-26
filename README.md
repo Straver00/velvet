@@ -30,13 +30,31 @@ Si los archivos de audio no se reproducen:
 
 ### 1. Habilitar GitHub Pages
 
+**Opción A: Configuración automática (Recomendado)**
+
+1. Ve a Settings > Pages
+2. Source: "GitHub Actions"
+3. Selecciona el workflow "Simple Deploy"
+4. Save
+
+**Opción B: Configuración manual**
+
 1. Ve a Settings > Pages
 2. Source: "Deploy from a branch"
 3. Branch: "main" o "master"
 4. Folder: "/ (root)"
 5. Save
 
-### 2. Verificar archivos necesarios
+### 2. Configurar permisos (si usas GitHub Actions)
+
+Si ves el error "Permission denied to github-actions[bot]":
+
+1. Ve a Settings > Actions > General
+2. En "Workflow permissions", selecciona "Read and write permissions"
+3. Marca "Allow GitHub Actions to create and approve pull requests"
+4. Save
+
+### 3. Verificar archivos necesarios
 
 Asegúrate de que estos archivos estén en tu repositorio:
 
@@ -47,7 +65,7 @@ Asegúrate de que estos archivos estén en tu repositorio:
 - ✅ `songs/Cherry Waves.mp3`
 - ✅ `songs/K. - Cigarettes After Sex.mp3`
 
-### 3. Debugging
+### 4. Debugging
 
 Para verificar que todo funcione:
 
@@ -62,7 +80,7 @@ Para verificar que todo funcione:
    === Verificación post-inicialización ===
    ```
 
-### 4. Problemas comunes
+### 5. Problemas comunes
 
 #### Los archivos de audio muestran error 404:
 

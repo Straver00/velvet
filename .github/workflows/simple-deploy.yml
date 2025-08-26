@@ -1,0 +1,24 @@
+name: Simple Deploy
+
+on:
+  push:
+    branches: [main, master]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Verify files
+        run: |
+          echo "Verificando archivos..."
+          ls -la
+          echo "Verificando archivos de audio..."
+          ls -la songs/
+          echo "Verificando archivos principales..."
+          test -f index.html && echo "✅ index.html encontrado"
+          test -f style.css && echo "✅ style.css encontrado"
+          test -f script.js && echo "✅ script.js encontrado"
+          test -f .nojekyll && echo "✅ .nojekyll encontrado"

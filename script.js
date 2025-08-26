@@ -32,77 +32,6 @@ let touchStartX = 0;
 let touchEndX = 0;
 let isSwiping = false;
 
-// Función para verificar compatibilidad y detectar problemas
-function checkCompatibility() {
-  console.log("=== Verificación de compatibilidad ===");
-  console.log("User Agent:", navigator.userAgent);
-  console.log("Plataforma:", navigator.platform);
-  console.log("Soporte de audio:", !!window.Audio);
-  console.log(
-    "Soporte de Web Audio API:",
-    !!window.AudioContext || !!window.webkitAudioContext
-  );
-  console.log("Soporte de touch:", "ontouchstart" in window);
-  console.log("URL actual:", window.location.href);
-  console.log("Protocolo:", window.location.protocol);
-  console.log("Hostname:", window.location.hostname);
-
-  // Verificar si estamos en GitHub Pages
-  if (
-    window.location.hostname.includes("github.io") ||
-    window.location.hostname.includes("github.com")
-  ) {
-    console.log("Detectado GitHub Pages");
-  }
-
-  // Verificar elementos del DOM
-  console.log("=== Verificación de elementos DOM ===");
-  console.log("titleEl:", !!titleEl);
-  console.log("dateEl:", !!dateEl);
-  console.log("contentEl:", !!contentEl);
-  console.log("songTitleEl:", !!songTitleEl);
-  console.log("songArtistEl:", !!songArtistEl);
-  console.log("playPauseBtn:", !!playPauseBtn);
-  console.log("sideNavigation:", !!document.querySelector(".side-navigation"));
-  console.log("swipeIndicator:", !!swipeIndicator);
-
-  // Verificar archivos de audio
-  console.log("=== Verificación de archivos de audio ===");
-  const audioFiles = [
-    "songs/Cherry Waves.mp3",
-    "songs/K. - Cigarettes After Sex.mp3",
-  ];
-
-  audioFiles.forEach((file) => {
-    fetch(file, { method: "HEAD" })
-      .then((response) => {
-        if (response.ok) {
-          console.log(
-            `✅ ${file} - Disponible (${response.headers.get(
-              "content-length"
-            )} bytes)`
-          );
-        } else {
-          console.error(`❌ ${file} - Error ${response.status}`);
-        }
-      })
-      .catch((error) => {
-        console.error(`❌ ${file} - Error de red:`, error);
-      });
-  });
-
-  // Verificar si los writings se cargan correctamente
-  console.log("=== Verificación de datos ===");
-  console.log("writings length:", writings.length);
-  console.log("writings[0]:", writings[0]);
-  console.log("currentIndex:", currentIndex);
-}
-
-// Ejecutar verificación al cargar
-document.addEventListener("DOMContentLoaded", () => {
-  setTimeout(checkCompatibility, 1000);
-});
-
 // Elementos del DOM
 const titleEl = document.getElementById("entry-title");
 const dateEl = document.getElementById("entry-date");
@@ -260,24 +189,10 @@ function setupDeviceInterface() {
     // Dispositivo no táctil: mostrar botones laterales, ocultar indicador de swipe
     if (sideNavigation) {
       sideNavigation.style.display = "block";
-      // Asegurar que los botones sean visibles
-      const navButtons = sideNavigation.querySelectorAll(".nav-btn");
-      navButtons.forEach((btn) => {
-        btn.style.display = "flex";
-        btn.style.visibility = "visible";
-        btn.style.opacity = "1";
-      });
     }
     if (swipeIndicator) {
       swipeIndicator.style.display = "none";
     }
-  }
-
-  // Verificar que el botón de play/pause sea visible
-  if (playPauseBtn) {
-    playPauseBtn.style.display = "flex";
-    playPauseBtn.style.visibility = "visible";
-    playPauseBtn.style.opacity = "1";
   }
 }
 
@@ -362,35 +277,13 @@ function loadAndPlayMusic(song) {
   });
 
   currentAudio.addEventListener("error", (e) => {
-    console.error("Error cargando audio:", e);
-    console.error("Error details:", currentAudio.error);
     songTitleEl.textContent = "Error cargando música";
     songArtistEl.textContent = "Verifica el archivo de audio";
     isPlaying = false;
     updatePlayButton();
-
-    // Mostrar información específica del error
-    if (currentAudio.error) {
-      switch (currentAudio.error.code) {
-        case MediaError.MEDIA_ERR_ABORTED:
-          console.log("Reproducción abortada por el usuario");
-          break;
-        case MediaError.MEDIA_ERR_NETWORK:
-          console.log("Error de red al cargar el archivo");
-          break;
-        case MediaError.MEDIA_ERR_DECODE:
-          console.log("Error de decodificación del archivo");
-          break;
-        case MediaError.MEDIA_ERR_SRC_NOT_SUPPORTED:
-          console.log("Formato de archivo no soportado");
-          break;
-        default:
-          console.log("Error desconocido");
-      }
-    }
   });
 
-  // Intentar reproducir con mejor manejo de errores
+  // Intentar reproducir
   const playPromise = currentAudio.play();
 
   if (playPromise !== undefined) {
@@ -398,18 +291,12 @@ function loadAndPlayMusic(song) {
       .then(() => {
         isPlaying = true;
         updatePlayButton();
-        console.log("Audio reproducido exitosamente");
       })
       .catch((error) => {
-        console.error("Error reproduciendo audio:", error);
         songTitleEl.textContent = "No se puede reproducir";
         songArtistEl.textContent = "Haz clic para intentar";
         isPlaying = false;
         updatePlayButton();
-
-        // Intentar cargar el archivo de forma diferente
-        console.log("Intentando método alternativo de carga...");
-        currentAudio.load();
       });
   }
 }
@@ -522,20 +409,3 @@ renderEntry(currentIndex);
 updateVolumeAria();
 setupSwipeEvents();
 setupDeviceInterface();
-
-// Verificación adicional después de la inicialización
-setTimeout(() => {
-  console.log("=== Verificación post-inicialización ===");
-  console.log(
-    "Botones de navegación visibles:",
-    document.querySelectorAll(".nav-btn").length
-  );
-  console.log("Botón play/pause visible:", playPauseBtn.offsetParent !== null);
-  console.log("Contenido renderizado:", contentEl.textContent.length > 0);
-
-  // Verificar estilos aplicados
-  const computedStyle = window.getComputedStyle(playPauseBtn);
-  console.log("Botón play/pause display:", computedStyle.display);
-  console.log("Botón play/pause visibility:", computedStyle.visibility);
-  console.log("Botón play/pause opacity:", computedStyle.opacity);
-}, 2000);

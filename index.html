@@ -11,33 +11,13 @@
   <title>Velvet</title>
   <link rel="stylesheet" href="style.css">
   
-  <!-- Fallback para CSS si no carga -->
-  <script>
-    // Verificar si el CSS se carga correctamente
-    setTimeout(() => {
-      const testElement = document.createElement('div');
-      testElement.style.position = 'absolute';
-      testElement.style.left = '-9999px';
-      testElement.className = 'card';
-      document.body.appendChild(testElement);
-      
-      const computedStyle = window.getComputedStyle(testElement);
-      const backgroundColor = computedStyle.backgroundColor;
-      
-      console.log("CSS cargado:", backgroundColor !== 'rgba(0, 0, 0, 0)');
-      console.log("Color de fondo de card:", backgroundColor);
-      
-      document.body.removeChild(testElement);
-    }, 1000);
-  </script>
-  
   <!-- Preload de archivos de audio para mejor rendimiento -->
   <link rel="preload" href="songs/Cherry Waves.mp3" as="fetch" type="audio/mpeg" crossorigin>
   <link rel="preload" href="songs/K. - Cigarettes After Sex.mp3" as="fetch" type="audio/mpeg" crossorigin>
 </head>
 <body>
   <main class="container">
-    <h1 id="title">Para Velvet</h1>
+    <h1 id="title">Velvet</h1>
     
     <article class="card">
       <header>

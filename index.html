@@ -3,22 +3,107 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Velvet - Una aplicación personal para leer y escuchar música">
   <title>Velvet</title>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <div class="container">
+  <main class="container">
     <h1 id="title">Para Velvet</h1>
-    <div class="card">
-      <h2 id="entry-title"></h2>
-      <p id="entry-date"></p>
-      <div id="entry-content"></div>
-    </div>
-    <div class="controls">
-      <button id="prev">← Anterior</button>
-      <button id="next">Siguiente →</button>
-    </div>
+    
+    <article class="card">
+      <header>
+        <h2 id="entry-title" aria-label="Título de la entrada"></h2>
+        <time id="entry-date" aria-label="Fecha de la entrada"></time>
+      </header>
+      <div id="entry-content" aria-label="Contenido de la entrada"></div>
+    </article>
+    
+    <!-- Reproductor de música -->
+    <section class="music-player" role="region" aria-label="Reproductor de música">
+      <div class="music-info">
+        <div class="song-title" id="song-title" aria-label="Título de la canción">Sin música</div>
+        <div class="song-artist" id="song-artist" aria-label="Artista de la canción">Selecciona una entrada</div>
+      </div>
+      
+      <!-- Barra de progreso -->
+      <div class="progress-container" role="group" aria-label="Controles de progreso">
+        <span class="time-display" id="current-time" aria-label="Tiempo actual">0:00</span>
+        <div class="progress-bar">
+          <input 
+            type="range" 
+            id="progress" 
+            min="0" 
+            max="100" 
+            value="0" 
+            class="progress-slider"
+            aria-label="Progreso de la canción"
+            role="slider"
+            aria-valuemin="0"
+            aria-valuemax="100"
+            aria-valuenow="0"
+          >
+        </div>
+        <span class="time-display" id="total-time" aria-label="Duración total">0:00</span>
+      </div>
+      
+      <div class="music-controls" role="group" aria-label="Controles de reproducción">
+        <button 
+          id="play-pause" 
+          class="music-btn" 
+          title="Reproducir/Pausar"
+          aria-label="Reproducir música"
+          aria-pressed="false"
+        >
+          <span id="play-icon" aria-hidden="true">▶</span>
+        </button>
+        <div class="volume-control" role="group" aria-label="Control de volumen">
+          <span class="volume-label" id="volume-label">Vol</span>
+          <input 
+            type="range" 
+            id="volume" 
+            min="0" 
+            max="100" 
+            value="50"
+            aria-labelledby="volume-label"
+            aria-label="Control de volumen"
+            role="slider"
+            aria-valuemin="0"
+            aria-valuemax="100"
+            aria-valuenow="50"
+          >
+        </div>
+      </div>
+    </section>
+  </main>
+  
+  <!-- Botones de navegación laterales -->
+  <nav class="side-navigation" role="navigation" aria-label="Navegación entre entradas">
+    <button 
+      id="prev" 
+      class="nav-btn nav-btn-left"
+      aria-label="Entrada anterior"
+      title="Entrada anterior (Flecha izquierda)"
+    >
+      ‹
+    </button>
+    <button 
+      id="next" 
+      class="nav-btn nav-btn-right"
+      aria-label="Entrada siguiente"
+      title="Entrada siguiente (Flecha derecha)"
+    >
+      ›
+    </button>
+  </nav>
+  
+  <!-- Indicador de swipe para dispositivos táctiles -->
+  <div class="swipe-indicator" id="swipe-indicator">
+    <span class="arrow left">←</span>
+    Desliza para navegar
+    <span class="arrow right">→</span>
   </div>
+  
   <script src="script.js"></script>
 </body>
 </html>

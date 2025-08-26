@@ -44,6 +44,8 @@ function checkCompatibility() {
   );
   console.log("Soporte de touch:", "ontouchstart" in window);
   console.log("URL actual:", window.location.href);
+  console.log("Protocolo:", window.location.protocol);
+  console.log("Hostname:", window.location.hostname);
 
   // Verificar si estamos en GitHub Pages
   if (
@@ -53,7 +55,19 @@ function checkCompatibility() {
     console.log("Detectado GitHub Pages");
   }
 
+  // Verificar elementos del DOM
+  console.log("=== Verificación de elementos DOM ===");
+  console.log("titleEl:", !!titleEl);
+  console.log("dateEl:", !!dateEl);
+  console.log("contentEl:", !!contentEl);
+  console.log("songTitleEl:", !!songTitleEl);
+  console.log("songArtistEl:", !!songArtistEl);
+  console.log("playPauseBtn:", !!playPauseBtn);
+  console.log("sideNavigation:", !!document.querySelector(".side-navigation"));
+  console.log("swipeIndicator:", !!swipeIndicator);
+
   // Verificar archivos de audio
+  console.log("=== Verificación de archivos de audio ===");
   const audioFiles = [
     "songs/Cherry Waves.mp3",
     "songs/K. - Cigarettes After Sex.mp3",
@@ -76,6 +90,12 @@ function checkCompatibility() {
         console.error(`❌ ${file} - Error de red:`, error);
       });
   });
+
+  // Verificar si los writings se cargan correctamente
+  console.log("=== Verificación de datos ===");
+  console.log("writings length:", writings.length);
+  console.log("writings[0]:", writings[0]);
+  console.log("currentIndex:", currentIndex);
 }
 
 // Ejecutar verificación al cargar
@@ -240,10 +260,24 @@ function setupDeviceInterface() {
     // Dispositivo no táctil: mostrar botones laterales, ocultar indicador de swipe
     if (sideNavigation) {
       sideNavigation.style.display = "block";
+      // Asegurar que los botones sean visibles
+      const navButtons = sideNavigation.querySelectorAll(".nav-btn");
+      navButtons.forEach((btn) => {
+        btn.style.display = "flex";
+        btn.style.visibility = "visible";
+        btn.style.opacity = "1";
+      });
     }
     if (swipeIndicator) {
       swipeIndicator.style.display = "none";
     }
+  }
+
+  // Verificar que el botón de play/pause sea visible
+  if (playPauseBtn) {
+    playPauseBtn.style.display = "flex";
+    playPauseBtn.style.visibility = "visible";
+    playPauseBtn.style.opacity = "1";
   }
 }
 
@@ -292,9 +326,12 @@ function loadAndPlayMusic(song) {
   }
 
   // Crear nuevo elemento de audio
-  currentAudio = new Audio(song.file);
+  currentAudio = new Audio();
   currentAudio.volume = volumeSlider.value / 100;
   currentAudio.preload = "metadata"; // Precargar solo metadatos para mejor rendimiento
+
+  // Configurar el src después de crear el elemento para mejor compatibilidad
+  currentAudio.src = song.file;
 
   // Configurar eventos del audio
   currentAudio.addEventListener("loadedmetadata", () => {
@@ -485,3 +522,20 @@ renderEntry(currentIndex);
 updateVolumeAria();
 setupSwipeEvents();
 setupDeviceInterface();
+
+// Verificación adicional después de la inicialización
+setTimeout(() => {
+  console.log("=== Verificación post-inicialización ===");
+  console.log(
+    "Botones de navegación visibles:",
+    document.querySelectorAll(".nav-btn").length
+  );
+  console.log("Botón play/pause visible:", playPauseBtn.offsetParent !== null);
+  console.log("Contenido renderizado:", contentEl.textContent.length > 0);
+
+  // Verificar estilos aplicados
+  const computedStyle = window.getComputedStyle(playPauseBtn);
+  console.log("Botón play/pause display:", computedStyle.display);
+  console.log("Botón play/pause visibility:", computedStyle.visibility);
+  console.log("Botón play/pause opacity:", computedStyle.opacity);
+}, 2000);

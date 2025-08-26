@@ -109,6 +109,18 @@ function setupSwipeEvents() {
   container.addEventListener(
     "touchstart",
     (e) => {
+      // Verificar si el touch está en un control de audio
+      const target = e.target;
+      if (
+        target === progressSlider ||
+        target === volumeSlider ||
+        target === playPauseBtn ||
+        target.closest(".music-controls") ||
+        target.closest(".progress-container")
+      ) {
+        return; // No iniciar swipe si está en controles de audio
+      }
+
       touchStartX = e.changedTouches[0].screenX;
       isSwiping = true;
 
@@ -125,6 +137,18 @@ function setupSwipeEvents() {
     "touchmove",
     (e) => {
       if (!isSwiping) return;
+
+      // Verificar si el touch está en un control de audio
+      const target = e.target;
+      if (
+        target === progressSlider ||
+        target === volumeSlider ||
+        target === playPauseBtn ||
+        target.closest(".music-controls") ||
+        target.closest(".progress-container")
+      ) {
+        return; // No procesar swipe si está en controles de audio
+      }
 
       // Prevenir scroll vertical durante el swipe
       const touchY = e.changedTouches[0].screenY;
@@ -373,6 +397,7 @@ playPauseBtn.addEventListener("click", () => {
 
 // Event listener para volumen
 volumeSlider.addEventListener("input", (e) => {
+  e.stopPropagation(); // Prevenir que el evento se propague
   const volume = e.target.value / 100;
   if (currentAudio) {
     currentAudio.volume = volume;
@@ -382,12 +407,47 @@ volumeSlider.addEventListener("input", (e) => {
 
 // Event listener para barra de progreso
 progressSlider.addEventListener("input", (e) => {
+  e.stopPropagation(); // Prevenir que el evento se propague
   if (currentAudio && !isNaN(currentAudio.duration)) {
     const newTime = e.target.value;
     currentAudio.currentTime = newTime;
     currentTimeEl.textContent = formatTime(newTime);
     updateProgressAria();
   }
+});
+
+// Prevenir swipe en controles de audio
+progressSlider.addEventListener("touchstart", (e) => {
+  e.stopPropagation();
+});
+
+progressSlider.addEventListener("touchmove", (e) => {
+  e.stopPropagation();
+});
+
+progressSlider.addEventListener("touchend", (e) => {
+  e.stopPropagation();
+});
+
+volumeSlider.addEventListener("touchstart", (e) => {
+  e.stopPropagation();
+});
+
+volumeSlider.addEventListener("touchmove", (e) => {
+  e.stopPropagation();
+});
+
+volumeSlider.addEventListener("touchend", (e) => {
+  e.stopPropagation();
+});
+
+// Prevenir swipe en el botón de play/pause
+playPauseBtn.addEventListener("touchstart", (e) => {
+  e.stopPropagation();
+});
+
+playPauseBtn.addEventListener("touchend", (e) => {
+  e.stopPropagation();
 });
 
 // Event listeners para teclado

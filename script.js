@@ -32,6 +32,57 @@ let touchStartX = 0;
 let touchEndX = 0;
 let isSwiping = false;
 
+// Función para verificar compatibilidad y detectar problemas
+function checkCompatibility() {
+  console.log("=== Verificación de compatibilidad ===");
+  console.log("User Agent:", navigator.userAgent);
+  console.log("Plataforma:", navigator.platform);
+  console.log("Soporte de audio:", !!window.Audio);
+  console.log(
+    "Soporte de Web Audio API:",
+    !!window.AudioContext || !!window.webkitAudioContext
+  );
+  console.log("Soporte de touch:", "ontouchstart" in window);
+  console.log("URL actual:", window.location.href);
+
+  // Verificar si estamos en GitHub Pages
+  if (
+    window.location.hostname.includes("github.io") ||
+    window.location.hostname.includes("github.com")
+  ) {
+    console.log("Detectado GitHub Pages");
+  }
+
+  // Verificar archivos de audio
+  const audioFiles = [
+    "songs/Cherry Waves.mp3",
+    "songs/K. - Cigarettes After Sex.mp3",
+  ];
+
+  audioFiles.forEach((file) => {
+    fetch(file, { method: "HEAD" })
+      .then((response) => {
+        if (response.ok) {
+          console.log(
+            `✅ ${file} - Disponible (${response.headers.get(
+              "content-length"
+            )} bytes)`
+          );
+        } else {
+          console.error(`❌ ${file} - Error ${response.status}`);
+        }
+      })
+      .catch((error) => {
+        console.error(`❌ ${file} - Error de red:`, error);
+      });
+  });
+}
+
+// Ejecutar verificación al cargar
+document.addEventListener("DOMContentLoaded", () => {
+  setTimeout(checkCompatibility, 1000);
+});
+
 // Elementos del DOM
 const titleEl = document.getElementById("entry-title");
 const dateEl = document.getElementById("entry-date");
@@ -243,16 +294,22 @@ function loadAndPlayMusic(song) {
   // Crear nuevo elemento de audio
   currentAudio = new Audio(song.file);
   currentAudio.volume = volumeSlider.value / 100;
+  currentAudio.preload = "metadata"; // Precargar solo metadatos para mejor rendimiento
 
   // Configurar eventos del audio
   currentAudio.addEventListener("loadedmetadata", () => {
-    totalTimeEl.textContent = formatTime(currentAudio.duration);
-    progressSlider.max = currentAudio.duration;
-    updateProgressAria();
+    if (!isNaN(currentAudio.duration) && currentAudio.duration > 0) {
+      totalTimeEl.textContent = formatTime(currentAudio.duration);
+      progressSlider.max = currentAudio.duration;
+      updateProgressAria();
+    } else {
+      totalTimeEl.textContent = "0:00";
+      progressSlider.max = 100;
+    }
   });
 
   currentAudio.addEventListener("timeupdate", () => {
-    if (!isNaN(currentAudio.duration)) {
+    if (!isNaN(currentAudio.duration) && currentAudio.duration > 0) {
       currentTimeEl.textContent = formatTime(currentAudio.currentTime);
       progressSlider.value = currentAudio.currentTime;
       updateProgressAria();
@@ -268,23 +325,56 @@ function loadAndPlayMusic(song) {
   });
 
   currentAudio.addEventListener("error", (e) => {
-    console.log("Error cargando audio:", e);
+    console.error("Error cargando audio:", e);
+    console.error("Error details:", currentAudio.error);
     songTitleEl.textContent = "Error cargando música";
     songArtistEl.textContent = "Verifica el archivo de audio";
+    isPlaying = false;
+    updatePlayButton();
+
+    // Mostrar información específica del error
+    if (currentAudio.error) {
+      switch (currentAudio.error.code) {
+        case MediaError.MEDIA_ERR_ABORTED:
+          console.log("Reproducción abortada por el usuario");
+          break;
+        case MediaError.MEDIA_ERR_NETWORK:
+          console.log("Error de red al cargar el archivo");
+          break;
+        case MediaError.MEDIA_ERR_DECODE:
+          console.log("Error de decodificación del archivo");
+          break;
+        case MediaError.MEDIA_ERR_SRC_NOT_SUPPORTED:
+          console.log("Formato de archivo no soportado");
+          break;
+        default:
+          console.log("Error desconocido");
+      }
+    }
   });
 
-  // Intentar reproducir
-  currentAudio
-    .play()
-    .then(() => {
-      isPlaying = true;
-      updatePlayButton();
-    })
-    .catch((error) => {
-      console.log("Error reproduciendo audio:", error);
-      songTitleEl.textContent = "No se puede reproducir";
-      songArtistEl.textContent = "Haz clic para intentar";
-    });
+  // Intentar reproducir con mejor manejo de errores
+  const playPromise = currentAudio.play();
+
+  if (playPromise !== undefined) {
+    playPromise
+      .then(() => {
+        isPlaying = true;
+        updatePlayButton();
+        console.log("Audio reproducido exitosamente");
+      })
+      .catch((error) => {
+        console.error("Error reproduciendo audio:", error);
+        songTitleEl.textContent = "No se puede reproducir";
+        songArtistEl.textContent = "Haz clic para intentar";
+        isPlaying = false;
+        updatePlayButton();
+
+        // Intentar cargar el archivo de forma diferente
+        console.log("Intentando método alternativo de carga...");
+        currentAudio.load();
+      });
+  }
 }
 
 // Función para renderizar entrada

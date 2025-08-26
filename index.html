@@ -63,7 +63,9 @@
           aria-label="Reproducir música"
           aria-pressed="false"
         >
-          <span id="play-icon" aria-hidden="true">▶</span>
+          <svg id="play-icon" aria-hidden="true" width="32" height="32" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M8 5v14l11-7z"/>
+          </svg>
         </button>
         <div class="volume-control" role="group" aria-label="Control de volumen">
           <span class="volume-label" id="volume-label">Vol</span>
@@ -93,7 +95,9 @@
       aria-label="Entrada anterior"
       title="Entrada anterior (Flecha izquierda)"
     >
-      ‹
+             <svg width="32" height="32" viewBox="0 0 24 24" fill="currentColor">
+         <path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z"/>
+       </svg>
     </button>
     <button 
       id="next" 
@@ -101,15 +105,21 @@
       aria-label="Entrada siguiente"
       title="Entrada siguiente (Flecha derecha)"
     >
-      ›
+             <svg width="32" height="32" viewBox="0 0 24 24" fill="currentColor">
+         <path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"/>
+       </svg>
     </button>
   </nav>
   
   <!-- Indicador de swipe para dispositivos táctiles -->
   <div class="swipe-indicator" id="swipe-indicator">
-    <span class="arrow left">←</span>
-    Desliza para navegar
-    <span class="arrow right">→</span>
+         <svg class="arrow left" width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+       <path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z"/>
+     </svg>
+     Desliza para navegar
+     <svg class="arrow right" width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+       <path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"/>
+     </svg>
   </div>
   
   <script src="script.js"></script>

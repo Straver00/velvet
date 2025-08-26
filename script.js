@@ -223,12 +223,14 @@ function setupDeviceInterface() {
 // Función para actualizar el botón de play/pause
 function updatePlayButton() {
   if (isPlaying) {
-    playIcon.textContent = "⏸";
+    // Icono de pausa
+    playIcon.innerHTML = '<path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/>';
     playPauseBtn.classList.add("playing");
     playPauseBtn.setAttribute("aria-label", "Pausar música");
     playPauseBtn.setAttribute("aria-pressed", "true");
   } else {
-    playIcon.textContent = "▶";
+    // Icono de play
+    playIcon.innerHTML = '<path d="M8 5v14l11-7z"/>';
     playPauseBtn.classList.remove("playing");
     playPauseBtn.setAttribute("aria-label", "Reproducir música");
     playPauseBtn.setAttribute("aria-pressed", "false");

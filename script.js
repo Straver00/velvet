@@ -21,6 +21,28 @@ const writings = [
       file: "songs/K. - Cigarettes After Sex.mp3",
     },
   },
+  {
+    title: "Nada",
+    date: "27 de agosto de 2025",
+    content:
+      "Hoy no tengo mucho para escribirte, solo me estoy respondiendo preguntas que ni sé si estén correctas. Mi mayor pregunta es: ¿Qué fui para ti?\nEn esta roipa de bazar",
+    song: {
+      title: "Ropa De Bazar",
+      artist: "Ed Maverick ft. BRATTY",
+      file: "songs/Ed Maverick - Ropa De Bazar (Audio) ft. BRATTY.mp3",
+    },
+  },
+  {
+    title: "¿Qué hice?",
+    date: "29 de agosto de 2025",
+    content:
+      "Actué bien? Ahora pensarlo me carcome la mente; quizás solo malinterprete todo, quizás solo soy un obsesivo con falta de amor que no sabe que es ir lento, un desesperado que nunca le han dado verdadero amor. O quizás solo sea toxico todo esto y en el fondo no vale para nada la pena. Lo hice, te escribí y ahora tengo más preguntas que antes, no sé si tu respuesta sea muy alentadora y todo sea por mi culpa que ya no estamos juntos. Solo espero tu respuesta ansiosa de que todo esta bien, que puedo verte, que podemos estar, que todo solo fue un mal inicio.",
+    song: {
+      title: "Don't Cry",
+      artist: "Guns N' Roses",
+      file: "songs/Guns N' Roses - Don't Cry.mp3",
+    },
+  },
 ];
 
 let currentIndex = 0;

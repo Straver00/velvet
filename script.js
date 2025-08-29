@@ -25,7 +25,7 @@ const writings = [
     title: "Nada",
     date: "27 de agosto de 2025",
     content:
-      "Hoy no tengo mucho para escribirte, solo me estoy respondiendo preguntas que ni sé si estén correctas. Mi mayor pregunta es: ¿Qué fui para ti?\nEn esta roipa de bazar",
+      "Hoy no tengo mucho para escribirte, solo me estoy respondiendo preguntas que ni sé si estén correctas. Mi mayor pregunta es: ¿Qué fui para ti?\n",
     song: {
       title: "Ropa De Bazar",
       artist: "Ed Maverick ft. BRATTY",
